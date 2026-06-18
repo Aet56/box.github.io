@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👑 GOD TIERS MYSTERY BOX 👑</title>
+    <title>👑 ULTRA MULTI-CODE MYSTERY BOX 👑</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -253,79 +253,6 @@
             margin-bottom: 2.5rem;
         }
 
-        /* โซนคลังเก็บเซฟสมบัติ (Inventory) */
-        .inventory-section {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 1.5rem;
-            border: 1px solid #1e293b;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .inventory-section h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #cbd5e1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .inv-item {
-            background: #070a12;
-            border-radius: 12px;
-            padding: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            position: relative;
-            border: 1px solid #1e293b;
-        }
-
-        .inv-item img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 5px;
-        }
-
-        .inv-item .no-img {
-            font-size: 1.5rem;
-            height: 50px;
-            display: flex;
-            align-items: center;
-        }
-
-        .inv-count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--accent);
-            color: white;
-            border-radius: 10px;
-            padding: 2px 6px;
-            font-size: 0.7rem;
-        }
-
-        .btn-reset {
-            background: #334155;
-            color: #94a3b8;
-            font-size: 0.8rem;
-            padding: 0.3rem 0.8rem;
-        }
-        .btn-reset:hover { background: #475569; color: white; }
-
         /* ตารางเรท */
         .rates-table {
             background: var(--card-bg);
@@ -362,37 +289,33 @@
 <body>
 
     <div class="container">
-        <h1>🎁 ULTRA MYSTERY BOX 🎁</h1>
-        <p style="color: #64748b; margin-bottom: 2.5rem;">ระบบสุ่มระดับพระกาฬ พร้อมระบบบันทึกคลังไอเทมถาวร</p>
+        <h1>🎁 ULTRA MULTI-CODE MYSTERY BOX 🎁</h1>
+        <p style="color: #64748b; margin-bottom: 2.5rem;">ระบบกล่องสุ่มแอนิเมชันระดับพรีเมียม รองรับโค้ดของรางวัลหลากหลาย</p>
 
+        <!-- ส่วนแสดงเครดิต และ กรอกโค้ด -->
         <div class="status-panel">
             <div class="credit-display">
                 เครดิตของคุณ: <span id="credit-amount">0</span> เครดิต
             </div>
             <div class="code-box">
-                <input type="text" id="code-input" placeholder="ใส่โค้ด Tanggay...">
+                <input type="text" id="code-input" placeholder="กรอกโค้ดรับเครดิตฟรี...">
                 <button class="btn-redeem" onclick="redeemCode()">รับเครดิต</button>
             </div>
         </div>
 
+        <!-- รางวงล้อสุ่ม -->
         <div class="roulette-wrapper">
             <div class="pointer"></div>
             <div class="wheel" id="wheel"></div>
         </div>
 
+        <!-- ปุ่มกดสุ่ม -->
         <button class="btn-roll" id="roll-button" onclick="startRoll()">สุ่มกล่อง (5 เครดิต)</button>
 
+        <!-- แสดงข้อความผลลัพธ์ -->
         <div class="result-display" id="result-text"></div>
 
-        <div class="inventory-section">
-            <h2>
-                🎒 คลังสมบัติที่คุณสุ่มได้ (บันทึกเซฟอัตโนมัติ)
-                <button class="btn-reset" onclick="resetSave()">ล้างข้อมูลเซฟ</button>
-            </h2>
-            <div class="inventory-grid" id="inventory-grid">
-                </div>
-        </div>
-
+        <!-- ตาราง Drop Rates -->
         <div class="rates-table">
             <h3>📊 อัตราการออกรางวัลทั้งหมด (Drop Rates)</h3>
             <div class="rate-row"><span>🧂 เกลือ</span> <span>83.98899%</span></div>
@@ -406,7 +329,7 @@
     </div>
 
     <script>
-        // ข้อมูลไอเทม น้ำหนักเต็ม 10,000,000 (สิบล้านส่วนเพื่อรองรับเรท 0.00001%)
+        // ข้อมูลไอเทม น้ำหนักเต็ม 10,000,000 (สิบล้านส่วนเพื่อรองรับเรทละเอียดสูงสุด 0.00001%)
         const prizes = [
             { id: 'salt', name: 'เกลือ', weight: 8398899, class: 'rarity-salt', color: 'var(--color-salt)', img: '', icon: '🧂' },
             { id: 'io', name: 'ไอโอ', weight: 1000000, class: 'rarity-io', color: 'var(--color-io)', img: 'https://i.ibb.co/Q3KLdHqg/IMG-20260618-142542.jpg' },
@@ -417,11 +340,15 @@
             { id: 'god_hyeon', name: 'ราชาเหยนระดับเทพ', weight: 1, class: 'rarity-god', color: 'var(--color-god)', img: 'https://i.ibb.co/NdZjN3g2/received-2500171637110408.jpg' }
         ];
 
-        // ตัวแปรเก็บสถานะ (จะดึงข้อมูลมาจากเซฟเก่าถ้ามี)
-        let credits = parseInt(localStorage.getItem('gacha_credits')) || 0;
-        let hasRedeemed = localStorage.getItem('gacha_redeemed') === 'true';
-        let userInventory = JSON.parse(localStorage.getItem('gacha_inventory')) || {};
+        // ระบบคลังข้อมูลโค้ดและมูลค่าเครดิต
+        const codeRewards = {
+            'Tanggay': 100,
+            'Nat': 200,
+            'Tanggay2': 67
+        };
 
+        let credits = 0;
+        let usedCodes = new Set(); // เก็บประวัติโค้ดที่ถูกเปิดใช้งานไปแล้วในเซสชันนี้
         let isRolling = false;
         const itemWidth = 140; 
 
@@ -430,89 +357,36 @@
         const rollButton = document.getElementById('roll-button');
         const resultText = document.getElementById('result-text');
         const codeInput = document.getElementById('code-input');
-        const inventoryGrid = document.getElementById('inventory-grid');
 
-        // ฟังก์ชันรับโค้ดแจกเครดิต
+        // ฟังก์ชันระบบโค้ดแบบหลายโค้ด
         function redeemCode() {
             const code = codeInput.value.trim();
-            if (hasRedeemed) {
-                alert('คุณเคยใช้โค้ด Tanggay ไปแล้ว!');
+
+            if (!code) {
+                alert('กรุณากรอกโค้ดก่อนกดรับครับ!');
                 return;
             }
-            if (code === 'Tanggay') {
-                credits += 200;
-                hasRedeemed = true;
-                saveGameData();
-                updateUI();
-                alert('ยินดีด้วย! ได้รับ 200 เครดิตฟรีและบันทึกเซฟเรียบร้อย');
-                codeInput.value = '';
-            } else {
-                alert('โค้ดไม่ถูกต้อง!');
+
+            if (usedCodes.has(code)) {
+                alert('คุณเคยใช้โค้ดนี้ไปแล้วครับ!');
+                return;
             }
-        }
 
-        // เซฟข้อมูลลงเบราว์เซอร์
-        function saveGameData() {
-            localStorage.setItem('gacha_credits', credits);
-            localStorage.setItem('gacha_redeemed', hasRedeemed);
-            localStorage.setItem('gacha_inventory', JSON.stringify(userInventory));
-        }
-
-        // ล้างเซฟเริ่มต้นใหม่
-        function resetSave() {
-            if(confirm('คุณแน่ใจใช่ไหมที่จะล้างข้อมูลคลังสมบัติและเครดิตทั้งหมด?')) {
-                localStorage.clear();
-                credits = 0;
-                hasRedeemed = false;
-                userInventory = {};
-                saveGameData();
+            if (codeRewards.hasOwnProperty(code)) {
+                const rewardAmount = codeRewards[code];
+                credits += rewardAmount;
+                usedCodes.add(code); // บันทึกว่าโค้ดนี้ถูกใช้แล้ว
                 updateUI();
-                initWheel();
-                resultText.textContent = 'ล้างรหัสเซฟเรียบร้อยแล้ว!';
+                alert(`ยินดีด้วย! โค้ดเสร็จสมบูรณ์ ได้รับเพิ่ม +${rewardAmount} เครดิต`);
+                codeInput.value = ''; // ล้างช่องเพื่อให้พิมพ์โค้ดถัดไปได้ง่ายขึ้น
+            } else {
+                alert('ไม่พบโค้ดนี้ในระบบ กรุณาตรวจสอบตัวพิมพ์เล็ก-ใหญ่ให้ถูกต้องครับ');
             }
         }
 
         function updateUI() {
             creditAmountDisplay.textContent = credits;
             rollButton.disabled = credits < 5 || isRolling;
-            if(hasRedeemed) {
-                codeInput.placeholder = 'ใช้โค้ดไปแล้ว';
-                codeInput.disabled = true;
-                document.querySelector('.btn-redeem').disabled = true;
-            } else {
-                codeInput.placeholder = 'ใส่โค้ด Tanggay...';
-                codeInput.disabled = false;
-                document.querySelector('.btn-redeem').disabled = false;
-            }
-            renderInventory();
-        }
-
-        // แสดงผลคลังไอเทมที่เซฟไว้
-        function renderInventory() {
-            inventoryGrid.innerHTML = '';
-            let hasItems = false;
-            
-            prizes.forEach(prize => {
-                const count = userInventory[prize.id] || 0;
-                if (count > 0) {
-                    hasItems = true;
-                    const invCard = document.createElement('div');
-                    invCard.className = `inv-item`;
-                    invCard.style.borderColor = prize.color;
-                    
-                    let mediaHTML = prize.img ? `<img src="${prize.img}">` : `<div class="no-img">${prize.icon}</div>`;
-                    invCard.innerHTML = `
-                        ${mediaHTML}
-                        <div style="color:${prize.color}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:100%">${prize.name}</div>
-                        <span class="inv-count">x${count}</span>
-                    `;
-                    inventoryGrid.appendChild(invCard);
-                }
-            });
-
-            if(!hasItems) {
-                inventoryGrid.innerHTML = '<p style="color:#475569; grid-column: 1/-1; font-size:0.9rem;">คลังยังว่างเปล่า ลองไปสุ่มดูเลย!</p>';
-            }
         }
 
         // สุ่มหาของรางวัลตามเรทคณิตศาสตร์ที่ถูกต้อง
@@ -528,12 +402,12 @@
         }
 
         function getRandomPrizeForFiller() {
-            // สุ่มตัวประกอบแถววงล้อทั่วไป (คัดตัวแรร์จัดๆ ออกเพื่อให้เวลาเห็นในวงล้อตื่นเต้นขึ้น)
+            // สุ่มตัวประกอบแถวทั่วไป (ยกเว้นตัวแรร์จัดๆ เพื่อเอาไว้ลุ้นตอนจบ)
             const fillerPrizes = prizes.filter(p => p.id !== 'march' && p.id !== 'god_hyeon');
             return fillerPrizes[Math.floor(Math.random() * fillerPrizes.length)];
         }
 
-        // สร้างการ์ดไอเทมในวงล้อ
+        // สร้างบล็อกไอเทมในวงล้อ
         function createItemNode(prize) {
             const itemNode = document.createElement('div');
             itemNode.className = `item-card ${prize.class}`;
@@ -553,7 +427,7 @@
             }
         }
 
-        // ระบบกดสุ่มกล่อง
+        // ระบบกดหมุนสุ่มกล่อง
         function startRoll() {
             if (isRolling || credits < 5) return;
 
@@ -561,4 +435,45 @@
             isRolling = true;
             updateUI();
             
-            resultTe
+            resultText.textContent = '🎰 วงล้อกำลังสับเปลี่ยนข้อความรางวัล...';
+            resultText.style.color = '#cbd5e1';
+
+            initWheel();
+
+            const winningPrize = getWinningPrize();
+            const winIndex = 45; // บล็อกที่ล็อกผลลัพธ์
+            const children = wheel.children;
+            
+            // เปลี่ยนบล็อกตัวที่ 45 เป็นของรางวัลจริงที่สุ่มได้
+            const winNode = createItemNode(winningPrize);
+            wheel.replaceChild(winNode, children[winIndex]);
+
+            // คำนวณระยะแอนิเมชันสไลด์วงล้อ
+            const wrapperWidth = document.querySelector('.roulette-wrapper').offsetWidth;
+            const centerOffset = wrapperWidth / 2;
+            const randomInnerOffset = Math.floor(Math.random() * 80) - 40; // สุ่มจุดหยุดเยื้องเพิ่มความเนียน
+            const targetPosition = -((winIndex * itemWidth) + (itemWidth / 2) - centerOffset + randomInnerOffset);
+
+            wheel.offsetHeight; // Force reflow
+
+            // สไลด์ยาว 5 วินาที ความเร็วหน่วงปลายสมจริงแบบเว็บสุ่มชื่อดัง
+            wheel.style.transition = 'transform 5s cubic-bezier(0.1, 0.9, 0.2, 1)';
+            wheel.style.transform = `translateX(${targetPosition}px)`;
+
+            setTimeout(() => {
+                isRolling = false;
+                updateUI();
+                
+                // แสดงชื่อผลรางวัลแบบสีสันชัดเจน
+                resultText.innerHTML = `🎉 ได้รับ: <span style="color: ${winningPrize.color}">${winningPrize.name}</span>`;
+                
+                // เฟดกล่องอื่นๆ รอบข้างให้มืดลงเพื่อขับออร่ารางวัลใหญ่
+                for(let i = 0; i < children.length; i++) {
+                    if(i !== winIndex) children[i].style.opacity = '0.2';
+                }
+            }, 5000);
+        }
+
+        // สั่งทำงานตั้งแต่เริ่มต้นเปิดเว็บ
+        initWheel();
+        updateUIความเร็วหน่วงปลายสมจริงแบบเว็บสุ่มชื่อดังชื่อดัง
