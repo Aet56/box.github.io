@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Mystery Box - เว็บกล่องสุ่มขั้นเทพ ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --card-bg: #131a26;
+            --accent: #ec4899;
+            --accent-hover: #db2777;
+            
+            /* สีตามระดับความหายาก (Rarity Colors) */
+            --color-salt: #64748b;
+            --color-io: #3b82f6;
+            --color-nat: #10b981;
+            --color-teng: #a855f7;
+            --color-pineapple: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(to right, #ec4899, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(236, 72, 153, 0.4);
+            font-weight: 700;
+        }
+
+        /* ส่วนแสดงเครดิตและกรอกโค้ด */
+        .status-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 1.2rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2.5rem;
+            border: 1px solid #1e293b;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .credit-display {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        #credit-amount {
+            color: #f43f5e;
+            font-size: 1.7rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(244, 63, 94, 0.6);
+        }
+
+        .code-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        input[type="text"] {
+            background: #090d16;
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            outline: none;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.2s active, 0.3s transform, 0.3s background;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-redeem {
+            background: var(--accent);
+            color: white;
+            padding: 0.6rem 1.5rem;
+        }
+
+        .btn-redeem:hover {
+            background: var(--accent-hover);
+        }
+
+        /* รางสไลด์วงล้อแอนิเมชัน */
+        .roulette-wrapper {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            background: #0b0f19;
+            border-radius: 20px;
+            border: 3px solid #1e293b;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+        }
+
+        /* เส้นมาร์กเกอร์ตรงกลาง */
+        .pointer {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #ec4899;
+            z-index: 10;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #ec4899, 0 0 5px #ec4899;
+        }
+
+        .wheel {
+            display: flex;
+            position: absolute;
+            left: 0;
+            top: 15px;
+            height: 130px;
+            will-change: transform;
+        }
+
+        .item-card {
+            width: 130px;
+            height: 130px;
+            margin: 0 5px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.5rem;
+            border-bottom: 5px solid transparent;
+            flex-shrink: 0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.4s;
+        }
+
+        /* การตกแต่งสีไอเทมตามเรท */
+        .rarity-salt { border-bottom-color: var(--color-salt); color: #94a3b8; }
+        .rarity-io { border-bottom-color: var(--color-io); color: #60a5fa; }
+        .rarity-nat { border-bottom-color: var(--color-nat); color: #34d399; }
+        .rarity-teng { border-bottom-color: var(--color-teng); color: #c084fc; }
+        .rarity-pineapple { 
+            border-bottom-color: var(--color-pineapple); 
+            color: #fbbf24;
+            animation: superGlow 1s infinite alternate;
+        }
+
+        @keyframes superGlow {
+            from { text-shadow: 0 0 5px #fbbf24; box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.2); }
+            to { text-shadow: 0 0 20px #fbbf24, 0 0 10px #f59e0b; box-shadow: inset 0 0 20px rgba(245, 158, 11, 0.5); }
+        }
+
+        /* ปุ่มกดสุ่ม */
+        .btn-roll {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            color: white;
+            font-size: 1.6rem;
+            padding: 1.2rem 4rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-roll:hover:not(:disabled) {
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(236, 72, 153, 0.5);
+        }
+
+        button:disabled {
+            background: #334155 !important;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* หน้าจอแสดงผลลัพธ์ */
+        .result-display {
+            font-size: 2rem;
+            font-weight: 700;
+            min-height: 50px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ตารางเรทเปอร์เซ็นต์ */
+        .rates-table {
+            background: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            border: 1px solid #1e293b;
+            text-align: left;
+        }
+
+        .rates-table h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rate-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #1e293b;
+            font-weight: 600;
+        }
+
+        .rate-row:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🎁 LUCKY MYSTERY BOX 🎁</h1>
+        <p style="color: #64748b; margin-bottom: 2.5rem;">กล่องสุ่มวัดดวง ลุ้นรางวัลใหญ่ระดับตำนาน</p>
+
+        <div class="status-panel">
+            <div class="credit-display">
+                เครดิตของคุณ: <span id="credit-amount">0</span> เครดิต
+            </div>
+            <div class="code-box">
+                <input type="text" id="code-input" placeholder="ใส่โค้ดรับเครดิตฟรี...">
+                <button class="btn-redeem" onclick="redeemCode()">รับเครดิต</button>
+            </div>
+        </div>
+
+        <div class="roulette-wrapper">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel">
+                </div>
+        </div>
+
+        <button class="btn-roll" id="roll-button" onclick="startRoll()">สุ่มกล่อง (5 เครดิต)</button>
+
+        <div class="result-display" id="result-text"></div>
+
+        <div class="rates-table">
+            <h3>📊 อัตราการออกรางวัล (Drop Rates)</h3>
+            <div class="rate-row"><span style="color: var(--color-salt)">เกลือ</span> <span>83.99%</span></div>
+            <div class="rate-row"><span style="color: var(--color-io)">ไอโอ</span> <span>10.00%</span></div>
+            <div class="rate-row"><span style="color: var(--color-nat)">นัด</span> <span>5.00%</span></div>
+            <div class="rate-row"><span style="color: var(--color-teng)">ราชาเต้ง</span> <span>1.00%</span></div>
+            <div class="rate-row"><span style="color: var(--color-pineapple)">ราชาสัปรด 👑</span> <span>0.01%</span></div>
+        </div>
+    </div>
+
+    <script>
+        // กำหนดรายละเอียดไอเทมและน้ำหนัก (รวมกันเป็น 10,000 เพื่อความละเอียดระดับ 0.01%)
+        const prizes = [
+            { id: 'salt', name: 'เกลือ 🧂', weight: 8399, class: 'rarity-salt', color: 'var(--color-salt)' },
+            { id: 'io', name: 'ไอโอ 🤖', weight: 1000, class: 'rarity-io', color: 'var(--color-io)' },
+            { id: 'nat', name: 'นัด 🥶', weight: 500, class: 'rarity-nat', color: 'var(--color-nat)' },
+            { id: 'teng', name: 'ราชาเต้ง 👑', weight: 100, class: 'rarity-teng', color: 'var(--color-teng)' },
+            { id: 'pineapple', name: 'ราชาสัปรด 🍍', weight: 1, class: 'rarity-pineapple', color: 'var(--color-pineapple)' }
+        ];
+
+        let credits = 0;
+        let isRolling = false;
+        let hasRedeemed = false;
+        const itemWidth = 140; // ความกว้างของการ์ด (130px + margin ซ้ายขวา 10px)
+
+        const creditAmountDisplay = document.getElementById('credit-amount');
+        const wheel = document.getElementById('wheel');
+        const rollButton = document.getElementById('roll-button');
+        const resultText = document.getElementById('result-text');
+        const codeInput = document.getElementById('code-input');
+
+        // ฟังก์ชันเปิดใช้งานโค้ดลับ Tanggay
+        function redeemCode() {
+            const code = codeInput.value.trim();
+            if (hasRedeemed) {
+                alert('คุณเคยใช้โค้ดนี้ไปแล้วครับ!');
+                return;
+            }
+            if (code === 'Tanggay') {
+                credits += 100;
+                hasRedeemed = true;
+                updateCredits();
+                alert('ยินดีด้วย! คุณได้รับ 100 เครดิตเข้าบัญชีแล้ว');
+                codeInput.value = '';
+                codeInput.disabled = true;
+            } else {
+                alert('โค้ดไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+            }
+        }
+
+        function updateCredits() {
+            creditAmountDisplay.textContent = credits;
+            if (credits < 5) {
+                rollButton.disabled = true;
+            } else {
+                rollButton.disabled = false;
+            }
+        }
+
+        // ฟังก์ชันสุ่มตามน้ำหนักที่ถูกต้องจริง ๆ
+        function getWinningPrize() {
+            const totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0);
+            let random = Math.floor(Math.random() * totalWeight);
+            
+            for (const prize of prizes) {
+                if (random < prize.weight) {
+                    return prize;
+                }
+                random -= prize.weight;
+            }
+            return prizes[0];
+        }
+
+        // ฟังก์ชันสุ่มไอเทมทั่วไปมาถมในวงล้อให้ดูสวยงาม
+        function getRandomPrizeForFiller() {
+            // สุ่มกระจายทั่วไป (ยกเว้นตัวแรร์ที่สุด เพื่อไม่ให้สปอยล์หรือโผล่มาถี่เกินไปในแถว)
+            const fillerPrizes = prizes.filter(p => p.id !== 'pineapple');
+            return fillerPrizes[Math.floor(Math.random() * fillerPrizes.length)];
+        }
+
+        // รีเซ็ตหน้าตาวงล้อใหม่ก่อนเริ่มสุ่ม
+        function initWheel() {
+            wheel.innerHTML = '';
+            wheel.style.transition = 'none';
+            wheel.style.transform = 'translateX(0px)';
+            
+            // สร้างไอเทมสุ่มตัวประกอบขึ้นมา 60 ชิ้นยาวๆ ในรางสไลด์
+            for (let i = 0; i < 60; i++) {
+                const prize = getRandomPrizeForFiller();
+                const itemNode = document.createElement('div');
+                itemNode.className = `item-card ${prize.class}`;
+                itemNode.innerHTML = `<div>${prize.name}</div>`;
+                wheel.appendChild(itemNode);
+            }
+        }
+
+        // ฟังก์ชันทำงานตอนกดปุ่มสุ่ม
+        function startRoll() {
+            if (isRolling || credits < 5) return;
+
+            // หักเครดิต
+            credits -= 5;
+            updateCredits();
+            isRolling = true;
+            rollButton.disabled = true;
+            resultText.textContent = '🎰 ตัวเลือกรอบข้างกำลังเปลี่ยนไปเรื่อยๆ...';
+            resultText.style.color = '#cbd5e1';
+
+            // ล้างรอบเก่าแล้วสร้างรางไอเทมใหม่
+            initWheel();
+
+            // ล็อกผลการสุ่มล่วงหน้าจากระบบหลังบ้านจำลอง
+            const winningPrize = getWinningPrize();
+            
+            // กำหนดเป้าหมายให้ผลลัพธ์อยู่ที่ตัวที่ 45 ของรางเพื่อสไลด์เป็นระยะเวลานานกำลังดี
+            const winIndex = 45; 
+            const children = wheel.children;
+            
+            // แทนที่บล็อกเป้าหมายตัวที่ 45 ด้วยผลลัพธ์ของรางวัลที่แท้จริง
+            children[winIndex].className = `item-card ${winningPrize.class}`;
+            children[winIndex].innerHTML = `<div>${winningPrize.name}</div>`;
+
+            // คำนวณระยะกึ่งกลางของกรอบสุ่มเพื่อหาจุดหยุด
+            const wrapperWidth = document.querySelector('.roulette-wrapper').offsetWidth;
+            const centerOffset = wrapperWidth / 2;
+            
+            // สุ่มตำแหน่งเยื้องซ้าย-ขวานิดหน่อยในบล็อกนั้นๆ เพื่อความสมจริง ไม่ให้หยุดกลางเส้นเป๊ะทุกรอบ
+            const randomInnerOffset = Math.floor(Math.random() * 80) - 40; 
+            
+            const targetPosition = -((winIndex * itemWidth) + (itemWidth / 2) - centerOffset + randomInnerOffset);
+
+            // บังคับวาดหน้าจอใหม่ (Reflow) เพื่อเริ่มทำงานแอนิเมชันสไลด์
+            wheel.offsetHeight; 
+
+            // แอนิเมชันสไลด์แบบเว็บกล่องสุ่มดังระดับโลก วิ่งเร็วแล้วค่อย ๆ สโลว์ตอนปลายนุ่มนวล (Cubic Bezier)
+            wheel.style.transition = 'transform 5s cubic-bezier(0.12, 0.88, 0.25, 1)';
+            wheel.style.transform = `translateX(${targetPosition}px)`;
+
+            // เมื่อแอนิเมชันหมุนครบ 5 วินาที
+            setTimeout(() => {
+                isRolling = false;
+                updateCredits();
+                
+                // แสดงผลข้อความรางวัลอย่างสวยงาม
+                resultText.innerHTML = `🎉 ยินดีด้วยคุณได้รับ: <span style="color: ${winningPrize.color}">${winningPrize.name}</span>`;
+                
+                // ทำเอฟเฟกต์ Fade Out บล็อกอื่นๆ รอบข้างเพื่อให้รางวัลเด่นชัดขึ้น
+                for(let i = 0; i < children.length; i++) {
+                    if(i !== winIndex) children[i].style.opacity = '0.25';
+                }
+            }, 5000); 
+        }
+
+        // เริ่มต้นการตั้งค่าระบบหน้าเว็บ
+        initWheel();
+        updateCredits();
+    </script>
+</body>
+</html>
