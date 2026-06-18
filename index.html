@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 ULTRA MULTI-CODE MYSTERY BOX 👑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --card-bg: #111827;
+            --accent: #ec4899;
+            
+            /* เฉดสีตามระดับความแรร์ */
+            --color-salt: #64748b;
+            --color-io: #3b82f6;
+            --color-nat: #10b981;
+            --color-teng: #a855f7;
+            --color-pineapple: #f59e0b;
+            --color-march: #f43f5e;
+            --color-god: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(to right, #ef4444, #f59e0b, #ec4899, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(239, 68, 68, 0.4);
+            font-weight: 700;
+        }
+
+        /* ส่วนแสดงเครดิตและโค้ด */
+        .status-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 1.2rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2.5rem;
+            border: 1px solid #1e293b;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .credit-display {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        #credit-amount {
+            color: #f43f5e;
+            font-size: 1.7rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(244, 63, 94, 0.6);
+        }
+
+        .code-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        input[type="text"] {
+            background: #070a12;
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.2s active, 0.3s transform, 0.3s background;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-redeem {
+            background: var(--accent);
+            color: white;
+            padding: 0.6rem 1.5rem;
+        }
+
+        /* รางสไลด์วงล้อแอนิเมชัน */
+        .roulette-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: #090d16;
+            border-radius: 20px;
+            border: 3px solid #1e293b;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+        }
+
+        /* เส้นมาร์กตรงกลาง */
+        .pointer {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #ef4444;
+            z-index: 10;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #ef4444, 0 0 5px #ef4444;
+        }
+
+        .wheel {
+            display: flex;
+            position: absolute;
+            left: 0;
+            top: 15px;
+            height: 150px;
+            will-change: transform;
+        }
+
+        .item-card {
+            width: 130px;
+            height: 140px;
+            margin: 0 5px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.5rem;
+            border-bottom: 5px solid transparent;
+            flex-shrink: 0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.4s;
+        }
+
+        /* ตกแต่งรูปภาพในกล่องวงล้อ */
+        .item-card img {
+            width: 55px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-card .no-img {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        /* Border Rarity Colors */
+        .rarity-salt { border-bottom-color: var(--color-salt); color: #94a3b8; }
+        .rarity-io { border-bottom-color: var(--color-io); color: #60a5fa; }
+        .rarity-nat { border-bottom-color: var(--color-nat); color: #34d399; }
+        .rarity-teng { border-bottom-color: var(--color-teng); color: #c084fc; }
+        
+        .rarity-pineapple { 
+            border-bottom-color: var(--color-pineapple); color: #fbbf24;
+            animation: glowYellow 1s infinite alternate;
+        }
+        .rarity-march { 
+            border-bottom-color: var(--color-march); color: #f43f5e;
+            animation: glowPink 0.8s infinite alternate;
+        }
+        .rarity-god { 
+            border-bottom-color: var(--color-god); color: #ef4444;
+            animation: glowRed 0.4s infinite alternate;
+        }
+
+        /* เอฟเฟกต์แสงไอเทมระดับสูง */
+        @keyframes glowYellow { from { text-shadow: 0 0 5px #fbbf24; } to { text-shadow: 0 0 15px #fbbf24; } }
+        @keyframes glowPink { from { text-shadow: 0 0 5px #f43f5e; box-shadow: inset 0 0 10px rgba(244,63,94,0.3); } to { text-shadow: 0 0 20px #f43f5e; box-shadow: inset 0 0 20px rgba(244,63,94,0.6); } }
+        @keyframes glowRed { 
+            0% { text-shadow: 0 0 5px #ef4444; box-shadow: 0 0 5px rgba(239,68,68,0.5); } 
+            100% { text-shadow: 0 0 25px #ef4444, 0 0 10px #ff0000; box-shadow: 0 0 20px rgba(239,68,68,0.9); border-color: #ff0000; } 
+        }
+
+        .btn-roll {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            font-size: 1.6rem;
+            padding: 1.2rem 4rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-roll:hover:not(:disabled) {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.5);
+        }
+
+        button:disabled {
+            background: #334155 !important;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .result-display {
+            font-size: 2rem;
+            font-weight: 700;
+            min-height: 50px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ตารางเรท */
+        .rates-table {
+            background: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            border: 1px solid #1e293b;
+            text-align: left;
+        }
+
+        .rates-table h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .rate-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #1e293b;
+            font-weight: 600;
+        }
+        .rate-row img {
+            width: 25px;
+            height: 25px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🎁 ULTRA MULTI-CODE MYSTERY BOX 🎁</h1>
+        <p style="color: #64748b; margin-bottom: 2.5rem;">ระบบกล่องสุ่มแอนิเมชันระดับพรีเมียม รองรับโค้ดของรางวัลหลากหลาย</p>
+
+        <!-- ส่วนแสดงเครดิต และ กรอกโค้ด -->
+        <div class="status-panel">
+            <div class="credit-display">
+                เครดิตของคุณ: <span id="credit-amount">0</span> เครดิต
+            </div>
+            <div class="code-box">
+                <input type="text" id="code-input" placeholder="กรอกโค้ดรับเครดิตฟรี...">
+                <button class="btn-redeem" onclick="redeemCode()">รับเครดิต</button>
+            </div>
+        </div>
+
+        <!-- รางวงล้อสุ่ม -->
+        <div class="roulette-wrapper">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel"></div>
+        </div>
+
+        <!-- ปุ่มกดสุ่ม -->
+        <button class="btn-roll" id="roll-button" onclick="startRoll()">สุ่มกล่อง (5 เครดิต)</button>
+
+        <!-- แสดงข้อความผลลัพธ์ -->
+        <div class="result-display" id="result-text"></div>
+
+        <!-- ตาราง Drop Rates -->
+        <div class="rates-table">
+            <h3>📊 อัตราการออกรางวัลทั้งหมด (Drop Rates)</h3>
+            <div class="rate-row"><span>🧂 เกลือ</span> <span>83.98899%</span></div>
+            <div class="rate-row"><span><img src="https://i.ibb.co/Q3KLdHqg/IMG-20260618-142542.jpg"> ไอโอ</span> <span>10.00000%</span></div>
+            <div class="rate-row"><span>🥶 นัด</span> <span>5.00000%</span></div>
+            <div class="rate-row"><span><img src="https://i.ibb.co/Xx37VtNJ/Messenger-creation-80-FBD90-F-47-B9-43-CA-9-A1-B-3519030-E0-C4-C.jpg"> ราชาเต้ง</span> <span>1.00000%</span></div>
+            <div class="rate-row"><span><img src="https://i.ibb.co/Mk9TkRXX/images-6.jpg"> ราชาสัปรด</span> <span>0.01000%</span></div>
+            <div class="rate-row"><span><img src="https://i.ibb.co/hRpY37SZ/IMG-20260618-143306.jpg" style="border:1px solid var(--color-march)"> มาร์ชอุ้มสัปรด 🔥</span> <span>0.00100%</span></div>
+            <div class="rate-row"><span><img src="https://i.ibb.co/NdZjN3g2/received-2500171637110408.jpg" style="border:1px solid var(--color-god)"> ราชาเหยนระดับเทพ ⚡</span> <span>0.00001%</span></div>
+        </div>
+    </div>
+
+    <script>
+        // ข้อมูลไอเทม น้ำหนักเต็ม 10,000,000 (สิบล้านส่วนเพื่อรองรับเรทละเอียดสูงสุด 0.00001%)
+        const prizes = [
+            { id: 'salt', name: 'เกลือ', weight: 8398899, class: 'rarity-salt', color: 'var(--color-salt)', img: '', icon: '🧂' },
+            { id: 'io', name: 'ไอโอ', weight: 1000000, class: 'rarity-io', color: 'var(--color-io)', img: 'https://i.ibb.co/Q3KLdHqg/IMG-20260618-142542.jpg' },
+            { id: 'nat', name: 'นัด', weight: 500000, class: 'rarity-nat', color: 'var(--color-nat)', img: '', icon: '🥶' },
+            { id: 'teng', name: 'ราชาเต้ง', weight: 100000, class: 'rarity-teng', color: 'var(--color-teng)', img: 'https://i.ibb.co/Xx37VtNJ/Messenger-creation-80-FBD90-F-47-B9-43-CA-9-A1-B-3519030-E0-C4-C.jpg' },
+            { id: 'pineapple', name: 'ราชาสัปรด', weight: 1000, class: 'rarity-pineapple', color: 'var(--color-pineapple)', img: 'https://i.ibb.co/Mk9TkRXX/images-6.jpg' },
+            { id: 'march', name: 'มาร์ชอุ้มสัปรด', weight: 100, class: 'rarity-march', color: 'var(--color-march)', img: 'https://i.ibb.co/hRpY37SZ/IMG-20260618-143306.jpg' },
+            { id: 'god_hyeon', name: 'ราชาเหยนระดับเทพ', weight: 1, class: 'rarity-god', color: 'var(--color-god)', img: 'https://i.ibb.co/NdZjN3g2/received-2500171637110408.jpg' }
+        ];
+
+        // ระบบคลังข้อมูลโค้ดและมูลค่าเครดิต
+        const codeRewards = {
+            'Tanggay': 100,
+            'Nat': 200,
+            'Tanggay2': 67
+        };
+
+        let credits = 0;
+        let usedCodes = new Set(); // เก็บประวัติโค้ดที่ถูกเปิดใช้งานไปแล้วในเซสชันนี้
+        let isRolling = false;
+        const itemWidth = 140; 
+
+        const creditAmountDisplay = document.getElementById('credit-amount');
+        const wheel = document.getElementById('wheel');
+        const rollButton = document.getElementById('roll-button');
+        const resultText = document.getElementById('result-text');
+        const codeInput = document.getElementById('code-input');
+
+        // ฟังก์ชันระบบโค้ดแบบหลายโค้ด
+        function redeemCode() {
+            const code = codeInput.value.trim();
+
+            if (!code) {
+                alert('กรุณากรอกโค้ดก่อนกดรับครับ!');
+                return;
+            }
+
+            if (usedCodes.has(code)) {
+                alert('คุณเคยใช้โค้ดนี้ไปแล้วครับ!');
+                return;
+            }
+
+            if (codeRewards.hasOwnProperty(code)) {
+                const rewardAmount = codeRewards[code];
+                credits += rewardAmount;
+                usedCodes.add(code); // บันทึกว่าโค้ดนี้ถูกใช้แล้ว
+                updateUI();
+                alert(`ยินดีด้วย! โค้ดเสร็จสมบูรณ์ ได้รับเพิ่ม +${rewardAmount} เครดิต`);
+                codeInput.value = ''; // ล้างช่องเพื่อให้พิมพ์โค้ดถัดไปได้ง่ายขึ้น
+            } else {
+                alert('ไม่พบโค้ดนี้ในระบบ กรุณาตรวจสอบตัวพิมพ์เล็ก-ใหญ่ให้ถูกต้องครับ');
+            }
+        }
+
+        function updateUI() {
+            creditAmountDisplay.textContent = credits;
+            rollButton.disabled = credits < 5 || isRolling;
+        }
+
+        // สุ่มหาของรางวัลตามเรทคณิตศาสตร์ที่ถูกต้อง
+        function getWinningPrize() {
+            const totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0);
+            let random = Math.floor(Math.random() * totalWeight);
+            
+            for (const prize of prizes) {
+                if (random < prize.weight) return prize;
+                random -= prize.weight;
+            }
+            return prizes[0];
+        }
+
+        function getRandomPrizeForFiller() {
+            // สุ่มตัวประกอบแถวทั่วไป (ยกเว้นตัวแรร์จัดๆ เพื่อเอาไว้ลุ้นตอนจบ)
+            const fillerPrizes = prizes.filter(p => p.id !== 'march' && p.id !== 'god_hyeon');
+            return fillerPrizes[Math.floor(Math.random() * fillerPrizes.length)];
+        }
+
+        // สร้างบล็อกไอเทมในวงล้อ
+        function createItemNode(prize) {
+            const itemNode = document.createElement('div');
+            itemNode.className = `item-card ${prize.class}`;
+            let mediaHTML = prize.img ? `<img src="${prize.img}">` : `<div class="no-img">${prize.icon}</div>`;
+            itemNode.innerHTML = `${mediaHTML}<div>${prize.name}</div>`;
+            return itemNode;
+        }
+
+        function initWheel() {
+            wheel.innerHTML = '';
+            wheel.style.transition = 'none';
+            wheel.style.transform = 'translateX(0px)';
+            
+            for (let i = 0; i < 60; i++) {
+                const prize = getRandomPrizeForFiller();
+                wheel.appendChild(createItemNode(prize));
+            }
+        }
+
+        // ระบบกดหมุนสุ่มกล่อง
+        function startRoll() {
+            if (isRolling || credits < 5) return;
+
+            credits -= 5;
+            isRolling = true;
+            updateUI();
+            
+            resultText.textContent = '🎰 วงล้อกำลังสับเปลี่ยนข้อความรางวัล...';
+            resultText.style.color = '#cbd5e1';
+
+            initWheel();
+
+            const winningPrize = getWinningPrize();
+            const winIndex = 45; // บล็อกที่ล็อกผลลัพธ์
+            const children = wheel.children;
+            
+            // เปลี่ยนบล็อกตัวที่ 45 เป็นของรางวัลจริงที่สุ่มได้
+            const winNode = createItemNode(winningPrize);
+            wheel.replaceChild(winNode, children[winIndex]);
+
+            // คำนวณระยะแอนิเมชันสไลด์วงล้อ
+            const wrapperWidth = document.querySelector('.roulette-wrapper').offsetWidth;
+            const centerOffset = wrapperWidth / 2;
+            const randomInnerOffset = Math.floor(Math.random() * 80) - 40; // สุ่มจุดหยุดเยื้องเพิ่มความเนียน
+            const targetPosition = -((winIndex * itemWidth) + (itemWidth / 2) - centerOffset + randomInnerOffset);
+
+            wheel.offsetHeight; // Force reflow
+
+            // สไลด์ยาว 5 วินาที ความเร็วหน่วงปลายสมจริงแบบเว็บสุ่มชื่อดัง
+            wheel.style.transition = 'transform 5s cubic-bezier(0.1, 0.9, 0.2, 1)';
+            wheel.style.transform = `translateX(${targetPosition}px)`;
+
+            setTimeout(() => {
+                isRolling = false;
+                updateUI();
+                
+                // แสดงชื่อผลรางวัลแบบสีสันชัดเจน
+                resultText.innerHTML = `🎉 ได้รับ: <span style="color: ${winningPrize.color}">${winningPrize.name}</span>`;
+                
+                // เฟดกล่องอื่นๆ รอบข้างให้มืดลงเพื่อขับออร่ารางวัลใหญ่
+                for(let i = 0; i < children.length; i++) {
+                    if(i !== winIndex) children[i].style.opacity = '0.2';
+                }
+            }, 5000);
+        }
+
+        // สั่งทำงานตั้งแต่เริ่มต้นเปิดเว็บ
+        initWheel();
+        updateUI();
+    </script>
+</body>
+</html>
